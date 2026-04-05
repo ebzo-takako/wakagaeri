@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>若返りプログラム</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F5F0;
+  --surface: #FFFFFF;
+  --surface2: #F0EDE6;
+  --text: #1A1814;
+  --text2: #6B6560;
+  --text3: #A8A29E;
+  --accent: #2D6A4F;
+  --accent-light: #D8EFE1;
+  --accent2: #C05D3A;
+  --accent2-light: #FAEBE4;
+  --purple: #4A3F7A;
+  --purple-light: #ECEAF5;
+  --amber: #B5651D;
+  --amber-light: #FAF0E4;
+  --border: rgba(0,0,0,0.08);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 20px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.app-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.app-subtitle { font-size: 12px; color: var(--text3); margin-bottom: 14px; }
+.tabs { display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-family: 'Noto Sans JP', sans-serif;
+  border: none;
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
+.content { padding: 20px; max-width: 600px; margin: 0 auto; }
+.section { display: none; }
+.section.active { display: block; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+.stat {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 14px 12px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+.stat-val { font-size: 26px; font-weight: 700; color: var(--text); line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 11px; color: var(--text3); }
+.progress-wrap {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+.progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.progress-label { font-size: 13px; color: var(--text2); font-weight: 500; }
+.progress-pct { font-size: 13px; color: var(--accent); font-weight: 700; }
+.bar-bg { background: var(--surface2); border-radius: 6px; height: 8px; overflow: hidden; }
+.bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #52b788); border-radius: 6px; transition: width 0.4s ease; }
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 20px 0 10px;
+}
+.habit {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.habit:active { transform: scale(0.98); }
+.habit.done { border-color: var(--accent); background: #FAFFFE; }
+.habit.done .habit-title { color: var(--accent); }
+.habit-icon {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.ic-teal { background: var(--accent-light); }
+.ic-purple { background: var(--purple-light); }
+.ic-amber { background: var(--amber-light); }
+.ic-coral { background: var(--accent2-light); }
+.ic-blue { background: #E8F0FE; }
+.ic-pink { background: #FDE8F0; }
+.ic-red { background: #FDECEC; }
+.habit-body { flex: 1; min-width: 0; }
+.habit-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+.habit-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+.habit-meta { font-size: 11px; color: var(--text3); margin-top: 6px; }
+.check-circle {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  margin-top: 2px;
+  font-size: 13px;
+  color: transparent;
+}
+.habit.done .check-circle { background: var(--accent); border-color: var(--accent); color: white; }
+.new-tag {
+  display: inline-block; font-size: 10px;
+  background: var(--accent-light); color: var(--accent);
+  padding: 1px 7px; border-radius: 20px; font-weight: 700; margin-left: 6px; vertical-align: middle;
+}
+.fast-box {
+  background: var(--purple-light);
+  border-radius: var(--radius-sm);
+  padding: 12px; margin-top: 10px;
+}
+.fast-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+.fast-hours { font-size: 22px; font-weight: 700; color: var(--purple); }
+.fast-status { font-size: 11px; color: var(--purple); font-weight: 500; margin-top: 3px; }
+.fast-bar-bg { background: rgba(74,63,122,0.15); border-radius: 4px; height: 6px; overflow: hidden; }
+.fast-bar-fill { height: 100%; background: var(--purple); border-radius: 4px; transition: width 0.4s; }
+.meal-btns { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+.meal-btn {
+  font-size: 11px; padding: 5px 10px;
+  border: 1px solid rgba(74,63,122,0.3);
+  border-radius: 20px; background: white;
+  color: var(--purple); cursor: pointer;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all 0.2s;
+}
+.meal-btn.selected { background: var(--purple); color: white; border-color: var(--purple); }
+.day-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 20px; }
+.day-cell {
+  aspect-ratio: 1; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 10px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+}
+.day-cell.done-day { background: var(--accent); border-color: var(--accent); }
+.day-cell.today-cell { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-light); }
+.day-name { font-size: 10px; color: var(--text3); margin-bottom: 4px; }
+.day-cell.done-day .day-name { color: rgba(255,255,255,0.8); }
+.day-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+.day-cell.done-day .day-dot { background: white; }
+.streak-banner {
+  background: linear-gradient(135deg, var(--accent), #52b788);
+  border-radius: var(--radius-sm); padding: 16px; color: white;
+  margin-bottom: 16px; display: flex; align-items: center; gap: 14px;
+}
+.streak-num { font-size: 40px; font-weight: 700; line-height: 1; }
+.streak-text { font-size: 13px; opacity: 0.9; line-height: 1.6; }
+.info-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px; margin-bottom: 12px;
+}
+.info-card-title { font-size: 14px; font-weight: 500; margin-bottom: 6px; color: var(--text); }
+.info-card-body { font-size: 13px; color: var(--text2); line-height: 1.7; }
+.tag {
+  display: inline-block; font-size: 11px; padding: 2px 9px;
+  border-radius: 20px; margin-right: 5px; margin-top: 6px; font-weight: 500;
+}
+.tag-teal { background: var(--accent-light); color: var(--accent); }
+.tag-purple { background: var(--purple-light); color: var(--purple); }
+.tag-amber { background: var(--amber-light); color: var(--amber); }
+.tag-coral { background: var(--accent2-light); color: var(--accent2); }
+.bottom-msg { text-align: center; font-size: 12px; color: var(--text3); margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="app-title">若返りプログラム</div>
+  <div class="app-subtitle">毎日の小さな習慣で細胞から若くなる</div>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('today',event)">今日</button>
+    <button class="tab" onclick="showTab('weekly',event)">週間記録</button>
+    <button class="tab" onclick="showTab('science',event)">科学的根拠</button>
+  </div>
+</div>
+
+<div class="content">
+
+<div id="today" class="section active">
+  <div class="stats" style="margin-top:20px;">
+    <div class="stat"><div class="stat-val" id="s-done">0</div><div class="stat-label">完了 / 11</div></div>
+    <div class="stat"><div class="stat-val" id="s-time">0</div><div class="stat-label">合計分</div></div>
+    <div class="stat"><div class="stat-val" id="s-streak">0</div><div class="stat-label">継続日数</div></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-top">
+      <span class="progress-label" id="progress-msg">タップして記録しよう</span>
+      <span class="progress-pct" id="progress-pct">0%</span>
+    </div>
+    <div class="bar-bg"><div class="bar-fill" id="bar" style="width:0%"></div></div>
+  </div>
+
+  <div class="section-label">🌅 朝のルーティン</div>
+
+  <div class="habit" data-id="0" data-time="5" onclick="toggle(this)">
+    <div class="habit-icon ic-teal">☀️</div>
+    <div class="habit-body">
+      <div class="habit-title">朝日を浴びる</div>
+      <div class="habit-desc">カーテンを開けて5分、窓の前に立つ。体内時計がリセットされホルモンバランスが整う。</div>
+      <div class="habit-meta">5分 ・ かんたん</div>
+    </div>
+    <div class="check-circle">✓</div>
+  </div>
+
+  <div class="habit" data-id="1" data-time="2" onclick="toggle(this)">
+    <div class="habit-icon ic-blue">💧</div>
+    <div class="habit-body">
+      <div class="habit-title">コップ1杯の水</div>
+      <div class="habit-desc">寝ている間の脱水を補う。レモンを少し絞ると代謝アップ効果も。</div>
+      <div class="habit-meta">2分 ・ かんたん</div>
+    </div>
+    <div class="check-circle">✓</div>
+  </div>
+
+  <div class="habit" data-id="2" data-time="0" onclick="toggle(this)">
+    <div class="habit-icon ic-purple">⏱️</div>
+    <div class="habit-body">
+      <div class="habit-title">絶食タイマーを確認 <span class="new-tag">NEW</span></div>
+      <div class="habit-desc">前日の夕食から12〜16時間あけるのが目標。夕食を早めるだけでOK。</div>
+      <div class="fast-box" onclick="event.stopPropagation()">
+        <div class="fast-top">
+          <div>
+            <div class="fast-hours" id="fast-h">—</div>
+            <div class="fast-status" id="fast-st">昨夜の夕食時間を選んでください</div>
+          </div>
+        </div>
+        <div class="fast-bar-bg"><div class="fast-bar-fill" id="fast-fill" style="width:0%"></div></div>
+        <div class="meal-btns">
+          <button class="meal-btn" onclick="setMeal(17,this)">17時</button>
+          <button class="meal-btn" onclick="setMeal(18,this)">18時</button>
+          <button class="meal-btn" onclick="setMeal(19,this)">19時</button>
+          <button class="meal-btn" onclick="setMeal(20,this)">20時</button>
+          <button class="meal-btn" onclick="setMeal(21,this)">21時</button>
+        </div>
+      </div>
+      <div class="habit-meta">確認するだけ ・ かんたん</div>
+    </div>
+    <div class="check-circle">✓</div>
+  </div>
+
+  <div class="habit" data-id="3" data-time="10" onclick="toggle(this)">
+    <div class="habit-icon ic-purple">🧘</div>
+    <div class="habit-body">
+      <div class="habit-title">深呼吸 or 軽いストレッチ</div>
+      <div class="habit-desc">4-7-8呼吸法を3回、または関節を動かす体操。コルチゾールを抑える。</div>
+      <div class="habit-meta">10分 ・ かんたん</div>
+    </div>
+    <div class="check-circle">✓</div>
+  </div>
+
+  <div class="section-label">🥗 食事</div>
+
+  <div class="habit" data-id="4" data-time="0" onclick="toggle(this)">
+    <div class="habit-icon ic-teal">🥗</div>
+    <div class="habit-body">
+      <div class="habit-title">野菜・タンパク質を意識</div>
+      <div class="habit-desc">毎食「緑か色野菜を1種類」と「卵・魚・豆腐のどれか」を入れるだけ。抗酸化 & 筋肉維持。</div>
+      <div class="habit-meta">選択するだけ ・ かんたん</div>
+    </div>
+    <div class="check-circle">✓</div>
+  </div>
+
+  <div class="habit" data-id="5" data-time="0" onclick="toggle(this)">
+    <div class="habit-icon ic-red">🍬</div>
+    <div class="habit-body">
+      <div class="habit-title">甘いものを1つ減らす <span class="new-tag">NEW</span></div>
+      <div class="habit-desc">今日食べる予定の甘いものを1つだけ置き換える。チョコ→ナッツ、ジュース→お茶。糖化（AGEs）を抑えて肌・血管の老化を防ぐ。</div>
+      <div class="habit-meta">選択するだけ ・ 普通</div>
+    </div>
+    <div class="check-circle">✓</div>
+  </div>
+
+  <div class="section-label">🚶 昼〜夕方</div>
+
+  <div class="habit" data-id="6" data-time="10" onclick="toggle(this)">
+    <div class="habit-icon ic-amber">🚶</div>
+    <div class="habit-body">
+      <div class="habit-title">早歩き10分</div>
+      <div class="habit-desc">買い物・通勤でもOK。少し息が弾む程度のペースでテロメアの短縮を防ぐ。</div>
+      <div class="habit-meta">10分 ・ かんたん</div>
+    </div>
+    <div class="check-circle">✓</div>
+  </div>
+
+  <div class="habit" data-id="7" data-time="3" onclick="toggle(this)">
+    <div class="habit-icon ic-teal">🌿</div>
+    <div class="habit-body">
+      <div class="habit-title">自然や緑を見る</div>
+      <div class="habit-desc">植物や空を3分眺めるだけで炎症マーカー（CRP）が下がり心拍が安定する。</div>
+      <div class="habit-meta">3分 ・ かんたん</div>
+    </div>
+    <div class="check-circle">✓</div>
+  </div>
+
+  <div class="habit" data-id="8" data-time="5" onclick="toggle(this)">
+    <div class="habit-icon ic-blue">🧠</div>
+    <div class="habit-body">
+      <div class="habit-title">脳トレ5分</div>
+      <div class="habit-desc">パズル・読書・新しいルートで帰宅など何でもOK。BDNF（脳由来神経栄養因子）を増やす。</div>
+      <div class="habit-meta">5分 ・ かんたん</div>
+    </div>
+    <div class="check-circle">✓</div>
+  </div>
+
+  <div class="section-label">🌙 夜のルーティン</div>
+
+  <div class="habit" data-id="9" data-time="0" onclick="toggle(this)">
+    <div class="habit-icon ic-pink">🛁</div>
+    <div class="habit-body">
+      <div class="habit-title">就寝1時間前に画面を閉じる</div>
+      <div class="habit-desc">スマホをしまい、ぬるめのお風呂か読書へ。成長ホルモンの分泌は深い睡眠中がピーク。</div>
+      <div class="habit-meta">習慣の切り替え ・ 普通</div>
+    </div>
+    <div class="check-circle">✓</div>
+  </div>
+
+  <div class="habit" data-id="10" data-time="0" onclick="toggle(this)">
+    <div class="habit-icon ic-teal">🌙</div>
+    <div class="habit-body">
+      <div class="habit-title">同じ時間に寝る & 夕食を早めに</div>
+      <div class="habit-desc">±30分以内に同じ時刻に就寝。夕食は就寝3時間前までに終えると絶食12時間が自然に達成できる。</div>
+      <div class="habit-meta">行動するだけ ・ 普通</div>
+    </div>
+    <div class="check-circle">✓</div>
+  </div>
+
+  <div class="bottom-msg">チェックはブラウザに自動保存されます<br>毎日このページを開いて記録しよう</div>
+</div>
+
+<div id="weekly" class="section">
+  <div style="margin-top:20px;" id="streak-area"></div>
+  <div class="section-label">今週の記録</div>
+  <div class="day-grid" id="day-grid"></div>
+  <div class="section-label">継続のヒント</div>
+  <div class="info-card" style="border-left:3px solid var(--accent);">
+    <div class="info-card-title">絶食のコツ</div>
+    <div class="info-card-body">夕食を20時→18時に前倒しするだけで、翌朝7時起きなら13時間の絶食が自然に完成。無理な断食は不要。</div>
+  </div>
+  <div class="info-card" style="border-left:3px solid var(--accent2);">
+    <div class="info-card-title">糖化対策のコツ</div>
+    <div class="info-card-body">「完全にやめる」より「1つ置き換える」が長続きのコツ。甘いものをゼロにしなくて大丈夫。</div>
+  </div>
+  <div class="info-card" style="border-left:3px solid var(--purple);">
+    <div class="info-card-title">66日の法則</div>
+    <div class="info-card-body">習慣の定着には平均66日かかると言われています。まず21日を目標に。7割できれば十分です。</div>
+  </div>
+</div>
+
+<div id="science" class="section">
+  <div style="margin-top:20px;"></div>
+  <div class="info-card">
+    <div class="info-card-title">オートファジーと絶食</div>
+    <div class="info-card-body">食後12〜16時間で細胞の自食作用（オートファジー）が本格的に活性化。損傷したタンパク質や老廃物を分解・再利用し、細胞を若返らせる。2016年ノーベル生理学賞の研究テーマ。</div>
+    <span class="tag tag-purple">細胞修復</span><span class="tag tag-teal">睡眠</span>
+  </div>
+  <div class="info-card">
+    <div class="info-card-title">糖化（AGEs）と老化</div>
+    <div class="info-card-body">余分な糖がタンパク質と結合しAGEs（終末糖化産物）を生成。肌のシワ・くすみ、血管の硬化、認知機能の低下を招く。砂糖・精製糖質を減らすことで進行を遅らせられる。</div>
+    <span class="tag tag-coral">食事</span><span class="tag tag-coral">肌</span>
+  </div>
+  <div class="info-card">
+    <div class="info-card-title">テロメアと有酸素運動</div>
+    <div class="info-card-body">週150分の中強度運動でテロメアが若い状態に保たれる。10分×複数回に分けても同等の効果。歩行・自転車・水泳でOK。</div>
+    <span class="tag tag-teal">運動</span><span class="tag tag-purple">DNA</span>
+  </div>
+  <div class="info-card">
+    <div class="info-card-title">コルチゾール抑制と老化</div>
+    <div class="info-card-body">慢性ストレスは老化を加速。深呼吸や自然に触れることでコルチゾールを即座に下げられる。</div>
+    <span class="tag tag-purple">ストレス</span>
+  </div>
+  <div class="info-card">
+    <div class="info-card-title">BDNF（脳由来神経栄養因子）</div>
+    <div class="info-card-body">運動と知的刺激でBDNFが増え、脳の老化・認知症リスクが低下。有酸素運動後に知的活動を組み合わせると効果が増大。</div>
+    <span class="tag tag-teal">脳</span><span class="tag tag-teal">運動</span>
+  </div>
+  <div class="info-card">
+    <div class="info-card-title">成長ホルモンと睡眠</div>
+    <div class="info-card-body">深い睡眠の最初の90分に成長ホルモンの約80%が分泌。就寝前の習慣（画面を閉じる・入浴）が肌・筋肉の若返りに直結する。</div>
+    <span class="tag tag-purple">睡眠</span>
+  </div>
+  <div class="info-card">
+    <div class="info-card-title">腸内環境と全身の炎症</div>
+    <div class="info-card-body">食物繊維・発酵食品（味噌、納豆、ヨーグルト）で腸内細菌が整い、全身の慢性炎症が低下。「老化は炎症」という考え方（inflammaging）が近年注目されている。</div>
+    <span class="tag tag-amber">食事</span>
+  </div>
+</div>
+
+</div>
+
+<script>
+const TOTAL = 11;
+function todayStr() {
+  const d = new Date();
+  const jst = new Date(d.getTime() + 9 * 60 * 60 * 1000);
+  return jst.toISOString().slice(0, 10);
+}
+
+let state = {
+  done: JSON.parse(localStorage.getItem('yg_done') || '[]'),
+  date: localStorage.getItem('yg_date') || '',
+  streak: parseInt(localStorage.getItem('yg_streak') || '0'),
+  lastDate: localStorage.getItem('yg_last') || '',
+  week: JSON.parse(localStorage.getItem('yg_week') || '[]'),
+  mealHour: parseInt(localStorage.getItem('yg_meal') || '0') || null
+};
+
+// New day handling
+if (state.date !== todayStr()) {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yStr = yesterday.toISOString().slice(0,10);
+  if (state.done.length > 0) {
+    if (!state.week.includes(state.date)) state.week.push(state.date);
+    if (state.lastDate === yStr) state.streak++;
+    else state.streak = 1;
+    state.lastDate = state.date;
+  }
+  state.done = [];
+  state.date = todayStr();
+  save();
+}
+
+function save() {
+  localStorage.setItem('yg_done', JSON.stringify(state.done));
+  localStorage.setItem('yg_date', state.date);
+  localStorage.setItem('yg_streak', state.streak);
+  localStorage.setItem('yg_last', state.lastDate);
+  localStorage.setItem('yg_week', JSON.stringify(state.week));
+  if (state.mealHour) localStorage.setItem('yg_meal', state.mealHour);
+}
+
+function toggle(card) {
+  const id = parseInt(card.dataset.id);
+  if (state.done.includes(id)) {
+    state.done = state.done.filter(x => x !== id);
+  } else {
+    state.done.push(id);
+  }
+  save();
+  renderToday();
+}
+
+function renderToday() {
+  const n = state.done.length;
+  const pct = Math.round(n / TOTAL * 100);
+  let mins = 0;
+  document.querySelectorAll('.habit').forEach(h => {
+    const id = parseInt(h.dataset.id);
+    const isDone = state.done.includes(id);
+    h.classList.toggle('done', isDone);
+    if (isDone) mins += parseInt(h.dataset.time) || 0;
+  });
+  document.getElementById('s-done').textContent = n;
+  document.getElementById('s-time').textContent = mins;
+  document.getElementById('s-streak').textContent = state.streak;
+  document.getElementById('bar').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-msg').textContent =
+    n === 0 ? 'タップして記録しよう' :
+    n === TOTAL ? '全部完了！素晴らしい' :
+    n + '個完了 — あと' + (TOTAL - n) + '個';
+  renderFast();
+}
+
+function setMeal(hour, btn) {
+  state.mealHour = hour;
+  save();
+  document.querySelectorAll('.meal-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  renderFast();
+}
+
+function renderFast() {
+  if (!state.mealHour) return;
+  const now = new Date();
+  const meal = new Date();
+  meal.setDate(meal.getDate() - 1);
+  meal.setHours(state.mealHour, 0, 0, 0);
+  if (meal > now) meal.setDate(meal.getDate() - 1);
+  const elapsed = Math.floor((now - meal) / 3600000);
+  document.getElementById('fast-h').textContent = elapsed + '時間';
+  document.getElementById('fast-fill').style.width = Math.min(100, Math.round(elapsed / 16 * 100)) + '%';
+  document.getElementById('fast-st').textContent =
+    elapsed >= 16 ? '達成: 16時間以上 — オートファジー全開！' :
+    elapsed >= 12 ? '達成: 12時間以上 — オートファジー開始' :
+    '目標まであと' + (12 - elapsed) + '時間';
+  // restore selected button
+  document.querySelectorAll('.meal-btn').forEach(b => {
+    b.classList.toggle('selected', parseInt(b.textContent) === state.mealHour);
+  });
+}
+
+function buildWeekly() {
+  const grid = document.getElementById('day-grid');
+  grid.innerHTML = '';
+  const dayNames = ['月','火','水','木','金','土','日'];
+  const today = new Date();
+  const dow = (today.getDay() + 6) % 7; // 0=Mon
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - dow + i);
+    const dStr = d.toISOString().slice(0,10);
+    const isToday = dStr === todayStr();
+    const isDone = state.week.includes(dStr) || (isToday && state.done.length > 0);
+    const cell = document.createElement('div');
+    cell.className = 'day-cell' + (isDone ? ' done-day' : '') + (isToday ? ' today-cell' : '');
+    cell.innerHTML = '<div class="day-name">' + dayNames[i] + '</div><div class="day-dot"></div>';
+    cell.onclick = () => {
+      const idx = state.week.indexOf(dStr);
+      if (idx > -1) state.week.splice(idx, 1); else state.week.push(dStr);
+      save(); buildWeekly();
+    };
+    grid.appendChild(cell);
+  }
+  document.getElementById('streak-area').innerHTML =
+    '<div class="streak-banner"><div class="streak-num">' + state.streak +
+    '</div><div class="streak-text">日連続継続中<br><span style="font-size:12px;opacity:0.8;">毎日1つ以上でカウント</span></div></div>';
+}
+
+function showTab(id, e) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  e.target.classList.add('active');
+  if (id === 'weekly') buildWeekly();
+}
+
+renderToday();
+setInterval(renderFast, 60000);
+</script>
+</body>
+</html>
