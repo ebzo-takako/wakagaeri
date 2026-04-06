@@ -527,17 +527,52 @@ footer {
 /* ---- RESPONSIVE ---- */
 @media (max-width: 900px) {
   nav { padding: 16px 24px; }
+  .nav-name { font-size: 14px; }
   .hero { grid-template-columns: 1fr; min-height: auto; }
   .hero-left { padding: 100px 24px 48px; }
-  .hero-right { height: 320px; }
-  .features { padding: 80px 24px; }
-  .features-grid { grid-template-columns: 1fr; }
-  .habits-section { padding: 80px 24px; }
+  .hero-right { height: 280px; }
+  .hero-stats { gap: 24px; }
+  .features { padding: 64px 24px; }
+  .features-grid { grid-template-columns: 1fr; gap: 2px; }
+  .habits-section { padding: 64px 24px; }
   .habits-grid { grid-template-columns: 1fr; }
-  .science-section { padding: 80px 24px; }
+  .habit-pill { padding: 14px 16px; }
+  .science-section { padding: 64px 24px; }
   .science-grid { grid-template-columns: 1fr; }
-  .cta-section { padding: 80px 24px; }
+  .cta-section { padding: 64px 24px; }
+  .cta-section::before { font-size: 200px; }
   footer { flex-direction: column; gap: 16px; padding: 32px 24px; text-align: center; }
+  .footer-note { max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+  nav { padding: 12px 16px; }
+  .nav-name { display: none; }
+  .hero-left { padding: 80px 16px 40px; }
+  .hero-subtitle { font-size: 14px; }
+  .hero-stats { gap: 16px; flex-wrap: wrap; }
+  .stat-num { font-size: 22px; }
+  .hero-actions { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .btn-primary { width: 100%; justify-content: center; }
+  .features { padding: 48px 16px; }
+  .section-header { margin-bottom: 48px; }
+  .feature-card { padding: 28px 20px; }
+  .habits-section { padding: 48px 16px; }
+  .habit-pill { gap: 10px; }
+  .habit-pill-last { grid-column: span 1 !important; justify-content: flex-start !important; }
+  .habit-pill-icon { font-size: 18px; }
+  .habit-pill-title { font-size: 15px; }
+  .habit-pill-time { font-size: 11px; }
+  .science-section { padding: 48px 16px; }
+  .science-card { padding: 24px 20px; }
+  .cta-section { padding: 48px 16px; }
+  .cta-section::before { font-size: 140px; }
+  footer { padding: 24px 16px; }
+  .hero-right { height: 220px; }
+  .hero-logo-main svg { width: 120px; height: 120px; }
+  .ring:nth-child(1) { width: 300px !important; height: 300px !important; }
+  .ring:nth-child(2) { width: 220px !important; height: 220px !important; }
+  .ring:nth-child(3) { width: 140px !important; height: 140px !important; }
 }
 </style>
 </head>
@@ -772,7 +807,7 @@ footer {
       </div>
       <span class="habit-pill-time">切り替えるだけ</span>
     </div>
-    <div class="habit-pill" style="grid-column: span 2; justify-content: center;">
+    <div class="habit-pill" style="grid-column: span 2; justify-content: center;" class="habit-pill-last">
       <span class="habit-pill-icon">🌙</span>
       <div>
         <div class="habit-pill-title">同じ時間に就寝・夕食は早めに</div>
