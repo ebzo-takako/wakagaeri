@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>若返りプログラム</title>
+<meta name="description" content="科学的根拠に基づく毎日の若返り習慣を管理できる無料Webアプリ。オートファジー・抗糖化・テロメアケアなど11の習慣を1日40分以内で。">
+<!-- OGP -->
+<meta property="og:title" content="若返りプログラム｜科学に基づく毎日の若返り習慣アプリ">
+<meta property="og:description" content="毎日11の習慣で、細胞から若返る。絶食タイマー・早歩き・抗糖化食事など科学的根拠のある習慣を無料でチェック管理。1日40分以内で完結。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://wakagaeri-app.com/">
+<meta property="og:image" content="https://wakagaeri-app.com/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="若返りプログラム">
+<meta property="og:locale" content="ja_JP">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="若返りプログラム｜科学に基づく毎日の若返り習慣アプリ">
+<meta name="twitter:description" content="毎日11の習慣で、細胞から若返る。絶食タイマー・早歩き・抗糖化食事など科学的根拠のある習慣を無料でチェック管理。">
+<meta name="twitter:image" content="https://wakagaeri-app.com/og-image.svg">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@400;700;800&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #2e2a25;
+  --ink2: #6b6560;
+  --ink3: #a09890;
+  --bg: #f9f6f1;
+  --bg2: #f0ece3;
+  --green: #2d6a4f;
+  --green-light: #d8f3dc;
+  --green-mid: #40916c;
+  --accent: #b5451b;
+  --line: rgba(23,20,16,0.1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ---- LOGO SVG ---- */
+.logo-mark {
+  display: inline-block;
+}
+
+/* ---- NAV ---- */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 48px;
+  background: rgba(249,246,241,0.9);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.nav-name {
+  font-family: 'Shippori Mincho B1', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+}
+
+.nav-cta {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--green);
+  text-decoration: none;
+  padding: 8px 20px;
+  border: 1px solid var(--green);
+  border-radius: 40px;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+}
+.nav-cta:hover {
+  background: var(--green);
+  color: #fff;
+}
+
+/* ---- HERO ---- */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 80px;
+}
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 64px 80px 80px;
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--green);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--green);
+}
+
+.hero-title {
+  font-family: 'Shippori Mincho B1', serif;
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.hero-title span {
+  color: var(--green);
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  color: var(--ink2);
+  line-height: 1.8;
+  margin-bottom: 48px;
+  max-width: 380px;
+  font-weight: 300;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #3d3830;
+  color: #fff;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 14px 32px;
+  border-radius: 40px;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: all 0.25s;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: var(--green);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  font-size: 13px;
+  color: var(--ink2);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s;
+}
+.btn-secondary:hover { color: var(--ink); }
+.btn-secondary::after { content: '↓'; }
+
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 64px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line);
+}
+.stat-num {
+  font-family: 'Shippori Mincho B1', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.stat-lbl {
+  font-size: 12px;
+  color: var(--ink3);
+  margin-top: 2px;
+  letter-spacing: 0.03em;
+}
+
+/* Hero right — large logo */
+.hero-right {
+  background: var(--bg2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-logo-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(23,20,16,0.06);
+  animation: spin-slow linear infinite;
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes spin-rev {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
+}
+@keyframes float {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+.hero-logo-main {
+  position: relative;
+  z-index: 2;
+  animation: float 6s ease-in-out infinite;
+}
+
+/* ---- SECTION: FEATURES ---- */
+.features {
+  padding: 120px 80px;
+  background: var(--bg);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 72px;
+}
+
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  color: var(--green);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Shippori Mincho B1', serif;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.feature-card {
+  background: var(--bg);
+  padding: 40px 36px;
+  transition: background 0.2s;
+}
+.feature-card:hover { background: var(--bg2); }
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 24px;
+}
+
+.feature-title {
+  font-family: 'Shippori Mincho B1', serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--ink);
+}
+
+.feature-desc {
+  font-size: 14px;
+  color: var(--ink2);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* ---- HABITS SECTION ---- */
+.habits-section {
+  padding: 120px 80px;
+  background: #5c5347;
+  color: #fff;
+}
+
+.habits-section .section-eyebrow { color: var(--green-mid); }
+.habits-section .section-title { color: #fff; }
+
+.habits-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 56px;
+}
+
+.habit-pill {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.habit-pill:hover {
+  border-color: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.04);
+}
+
+.habit-pill-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.habit-pill-title {
+  font-size: 17px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.habit-pill-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  font-weight: 300;
+}
+
+.habit-pill-time {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--green-mid);
+  flex-shrink: 0;
+  font-weight: 500;
+}
+
+/* ---- SCIENCE SECTION ---- */
+.science-section {
+  padding: 120px 80px;
+  background: var(--bg2);
+}
+
+.science-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.science-card {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.science-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.sc-green::before { background: var(--green-mid); }
+.sc-amber::before { background: var(--accent); }
+.sc-purple::before { background: #6c5ce7; }
+.sc-blue::before { background: #0984e3; }
+
+.science-card-title {
+  font-family: 'Shippori Mincho B1', serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.science-card-desc {
+  font-size: 14px;
+  color: var(--ink2);
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.science-tag {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 11px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+.tag-g { background: var(--green-light); color: var(--green); }
+.tag-a { background: #fde8d8; color: var(--accent); }
+.tag-p { background: #ede9f8; color: #6c5ce7; }
+.tag-b { background: #dbeafe; color: #0984e3; }
+
+/* ---- CTA SECTION ---- */
+.cta-section {
+  padding: 120px 80px;
+  text-align: center;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '若';
+  position: absolute;
+  font-family: 'Shippori Mincho B1', serif;
+  font-size: 400px;
+  font-weight: 800;
+  color: rgba(23,20,16,0.03);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  letter-spacing: -0.05em;
+}
+
+.cta-title {
+  font-family: 'Shippori Mincho B1', serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.cta-sub {
+  font-size: 16px;
+  color: var(--ink2);
+  margin-bottom: 40px;
+  font-weight: 300;
+  position: relative;
+}
+
+.cta-note {
+  font-size: 12px;
+  color: var(--ink3);
+  margin-top: 16px;
+  position: relative;
+}
+
+/* ---- FOOTER ---- */
+footer {
+  background: #3d3830;
+  color: rgba(255,255,255,0.4);
+  padding: 40px 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-note {
+  font-size: 12px;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+/* ---- ANIMATIONS ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 900px) {
+  nav { padding: 16px 24px; }
+  .hero { grid-template-columns: 1fr; min-height: auto; }
+  .hero-left { padding: 100px 24px 48px; }
+  .hero-right { height: 320px; }
+  .features { padding: 80px 24px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .habits-section { padding: 80px 24px; }
+  .habits-grid { grid-template-columns: 1fr; }
+  .science-section { padding: 80px 24px; }
+  .science-grid { grid-template-columns: 1fr; }
+  .cta-section { padding: 80px 24px; }
+  footer { flex-direction: column; gap: 16px; padding: 32px 24px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="#">
+    <!-- Logo mark: minimal geometric -->
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="15" stroke="#171410" stroke-width="1"/>
+      <circle cx="16" cy="16" r="10" stroke="#2d6a4f" stroke-width="0.75"/>
+      <line x1="16" y1="4" x2="16" y2="28" stroke="#171410" stroke-width="0.75"/>
+      <line x1="4" y1="16" x2="28" y2="16" stroke="#171410" stroke-width="0.75"/>
+      <circle cx="16" cy="16" r="2.5" fill="#2d6a4f"/>
+      <circle cx="16" cy="9" r="1" fill="#171410"/>
+      <circle cx="16" cy="23" r="1" fill="#171410"/>
+      <circle cx="9" cy="16" r="1" fill="#171410"/>
+      <circle cx="23" cy="16" r="1" fill="#171410"/>
+    </svg>
+    <span class="nav-name">若返りプログラム</span>
+  </a>
+  <a class="nav-cta" href="wakagaeri.html">アプリを開く</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">科学に基づく若返り習慣</div>
+    <h1 class="hero-title">
+      毎日<span>11</span>の習慣で<br>細胞から<span>若返る</span>。
+    </h1>
+    <p class="hero-subtitle">
+      難しいことは何もない。朝日を浴びて、少し歩いて、早めに夕食を終える。
+      科学が証明した小さな習慣が、テロメアを守りオートファジーを呼び起こす。
+    </p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="wakagaeri.html">今日から始める →</a>
+      <a class="btn-secondary" href="#features">詳しく見る</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">11</div>
+        <div class="stat-lbl">毎日の習慣</div>
+      </div>
+      <div>
+        <div class="stat-num">40<span style="font-size:18px;">分</span></div>
+        <div class="stat-lbl">1日の合計時間</div>
+      </div>
+      <div>
+        <div class="stat-num">無料</div>
+        <div class="stat-lbl">完全無料</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <!-- Decorative rings -->
+    <div class="hero-logo-bg">
+      <div class="ring" style="width:480px;height:480px;animation-duration:60s;"></div>
+      <div class="ring" style="width:340px;height:340px;animation-duration:40s;animation-direction:reverse;"></div>
+      <div class="ring" style="width:200px;height:200px;animation-duration:25s;"></div>
+    </div>
+
+    <!-- Main large logo -->
+    <div class="hero-logo-main">
+      <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Outer circle -->
+        <circle cx="90" cy="90" r="88" stroke="#171410" stroke-width="1.5"/>
+        <!-- Middle circle -->
+        <circle cx="90" cy="90" r="60" stroke="#2d6a4f" stroke-width="1"/>
+        <!-- Inner circle -->
+        <circle cx="90" cy="90" r="32" stroke="#2d6a4f" stroke-width="0.75" stroke-dasharray="4 4"/>
+        <!-- Cross lines -->
+        <line x1="90" y1="2" x2="90" y2="178" stroke="#171410" stroke-width="1"/>
+        <line x1="2" y1="90" x2="178" y2="90" stroke="#171410" stroke-width="1"/>
+        <!-- Diagonal thin lines -->
+        <line x1="27" y1="27" x2="153" y2="153" stroke="#171410" stroke-width="0.5" opacity="0.3"/>
+        <line x1="153" y1="27" x2="27" y2="153" stroke="#171410" stroke-width="0.5" opacity="0.3"/>
+        <!-- Center dot -->
+        <circle cx="90" cy="90" r="8" fill="#2d6a4f"/>
+        <circle cx="90" cy="90" r="3" fill="#fff"/>
+        <!-- Cardinal points -->
+        <circle cx="90" cy="30" r="4" fill="#171410"/>
+        <circle cx="90" cy="150" r="4" fill="#171410"/>
+        <circle cx="30" cy="90" r="4" fill="#171410"/>
+        <circle cx="150" cy="90" r="4" fill="#171410"/>
+        <!-- Mid-ring points -->
+        <circle cx="90" cy="58" r="2.5" fill="#2d6a4f"/>
+        <circle cx="90" cy="122" r="2.5" fill="#2d6a4f"/>
+        <circle cx="58" cy="90" r="2.5" fill="#2d6a4f"/>
+        <circle cx="122" cy="90" r="2.5" fill="#2d6a4f"/>
+        <!-- Tick marks -->
+        <line x1="90" y1="2" x2="90" y2="12" stroke="#171410" stroke-width="2"/>
+        <line x1="90" y1="168" x2="90" y2="178" stroke="#171410" stroke-width="2"/>
+        <line x1="2" y1="90" x2="12" y2="90" stroke="#171410" stroke-width="2"/>
+        <line x1="168" y1="90" x2="178" y2="90" stroke="#171410" stroke-width="2"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-header">
+    <div class="section-eyebrow reveal">アプリの特徴</div>
+    <h2 class="section-title reveal">シンプルに、続く。</h2>
+  </div>
+  <div class="features-grid reveal">
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="22" stroke="#2d6a4f" stroke-width="1.5"/>
+        <line x1="24" y1="8" x2="24" y2="24" stroke="#171410" stroke-width="2" stroke-linecap="round"/>
+        <line x1="24" y1="24" x2="33" y2="33" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="24" cy="24" r="3" fill="#171410"/>
+      </svg>
+      <div class="feature-title">絶食タイマー</div>
+      <div class="feature-desc">前回の食事時間を選ぶだけで、オートファジーの進行をリアルタイムで確認。12〜16時間の目標まであと何時間かを表示。</div>
+    </div>
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 48 48" fill="none">
+        <rect x="6" y="10" width="36" height="32" rx="4" stroke="#171410" stroke-width="1.5"/>
+        <line x1="6" y1="18" x2="42" y2="18" stroke="#171410" stroke-width="1"/>
+        <line x1="16" y1="6" x2="16" y2="14" stroke="#171410" stroke-width="2" stroke-linecap="round"/>
+        <line x1="32" y1="6" x2="32" y2="14" stroke="#171410" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="18" cy="28" r="3" fill="#2d6a4f"/>
+        <circle cx="30" cy="28" r="3" fill="#2d6a4f" opacity="0.4"/>
+        <circle cx="18" cy="36" r="3" fill="#2d6a4f" opacity="0.4"/>
+      </svg>
+      <div class="feature-title">月間カレンダー記録</div>
+      <div class="feature-desc">週間・月間の達成記録を一目で確認。継続日数をビジュアルで把握することでモチベーションを維持。</div>
+    </div>
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="10" stroke="#2d6a4f" stroke-width="1.5"/>
+        <circle cx="24" cy="24" r="22" stroke="#171410" stroke-width="0.75" stroke-dasharray="3 3"/>
+        <line x1="24" y1="2" x2="24" y2="8" stroke="#171410" stroke-width="2" stroke-linecap="round"/>
+        <line x1="24" y1="40" x2="24" y2="46" stroke="#171410" stroke-width="2" stroke-linecap="round"/>
+        <line x1="2" y1="24" x2="8" y2="24" stroke="#171410" stroke-width="2" stroke-linecap="round"/>
+        <line x1="40" y1="24" x2="46" y2="24" stroke="#171410" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div class="feature-title">データは端末に保存</div>
+      <div class="feature-desc">アカウント登録不要。すべてのデータはブラウザのローカルストレージに保存。プライバシーを守りながら完全無料で使える。</div>
+    </div>
+  </div>
+</section>
+
+<!-- HABITS -->
+<section class="habits-section">
+  <div class="section-header">
+    <div class="section-eyebrow reveal">11の習慣</div>
+    <h2 class="section-title reveal">1日40分以内で完結する、<br>科学的な若返りルーティン。</h2>
+  </div>
+  <div class="habits-grid reveal">
+    <div class="habit-pill">
+      <span class="habit-pill-icon">☀️</span>
+      <div>
+        <div class="habit-pill-title">朝日を浴びる</div>
+        <div class="habit-pill-sub">体内時計をリセット</div>
+      </div>
+      <span class="habit-pill-time">5分</span>
+    </div>
+    <div class="habit-pill">
+      <span class="habit-pill-icon">💧</span>
+      <div>
+        <div class="habit-pill-title">コップ1杯の水</div>
+        <div class="habit-pill-sub">睡眠中の脱水を補給</div>
+      </div>
+      <span class="habit-pill-time">2分</span>
+    </div>
+    <div class="habit-pill">
+      <span class="habit-pill-icon">⏱️</span>
+      <div>
+        <div class="habit-pill-title">絶食タイマー確認</div>
+        <div class="habit-pill-sub">オートファジー活性化</div>
+      </div>
+      <span class="habit-pill-time">確認のみ</span>
+    </div>
+    <div class="habit-pill">
+      <span class="habit-pill-icon">🧘</span>
+      <div>
+        <div class="habit-pill-title">深呼吸・ストレッチ</div>
+        <div class="habit-pill-sub">コルチゾールを抑制</div>
+      </div>
+      <span class="habit-pill-time">10分</span>
+    </div>
+    <div class="habit-pill">
+      <span class="habit-pill-icon">🥗</span>
+      <div>
+        <div class="habit-pill-title">野菜・タンパク質を意識</div>
+        <div class="habit-pill-sub">抗酸化・筋肉維持</div>
+      </div>
+      <span class="habit-pill-time">選ぶだけ</span>
+    </div>
+    <div class="habit-pill">
+      <span class="habit-pill-icon">🍬</span>
+      <div>
+        <div class="habit-pill-title">甘いものを1つ減らす</div>
+        <div class="habit-pill-sub">糖化（AGEs）を抑制</div>
+      </div>
+      <span class="habit-pill-time">選ぶだけ</span>
+    </div>
+    <div class="habit-pill">
+      <span class="habit-pill-icon">🚶</span>
+      <div>
+        <div class="habit-pill-title">早歩き10分</div>
+        <div class="habit-pill-sub">テロメア短縮を防ぐ</div>
+      </div>
+      <span class="habit-pill-time">10分</span>
+    </div>
+    <div class="habit-pill">
+      <span class="habit-pill-icon">🌿</span>
+      <div>
+        <div class="habit-pill-title">自然・緑を見る</div>
+        <div class="habit-pill-sub">炎症マーカーを低下</div>
+      </div>
+      <span class="habit-pill-time">3分</span>
+    </div>
+    <div class="habit-pill">
+      <span class="habit-pill-icon">🧠</span>
+      <div>
+        <div class="habit-pill-title">脳トレ5分</div>
+        <div class="habit-pill-sub">BDNFを増やす</div>
+      </div>
+      <span class="habit-pill-time">5分</span>
+    </div>
+    <div class="habit-pill">
+      <span class="habit-pill-icon">🛁</span>
+      <div>
+        <div class="habit-pill-title">就寝前に画面を閉じる</div>
+        <div class="habit-pill-sub">成長ホルモン分泌促進</div>
+      </div>
+      <span class="habit-pill-time">切り替えるだけ</span>
+    </div>
+    <div class="habit-pill" style="grid-column: span 2; justify-content: center;">
+      <span class="habit-pill-icon">🌙</span>
+      <div>
+        <div class="habit-pill-title">同じ時間に就寝・夕食は早めに</div>
+        <div class="habit-pill-sub">オートファジー・細胞修復を最大化</div>
+      </div>
+      <span class="habit-pill-time">行動するだけ</span>
+    </div>
+  </div>
+</section>
+
+<!-- SCIENCE -->
+<section class="science-section">
+  <div class="section-header">
+    <div class="section-eyebrow reveal">科学的根拠</div>
+    <h2 class="section-title reveal">流行ではなく、<br>研究に裏付けられた習慣。</h2>
+  </div>
+  <div class="science-grid reveal">
+    <div class="science-card sc-green">
+      <div class="science-card-title">オートファジーと絶食</div>
+      <div class="science-card-desc">食後12〜16時間で細胞の自食作用が本格的に活性化。損傷タンパク質を分解し細胞を若返らせる。2016年ノーベル生理学・医学賞の研究テーマ。</div>
+      <span class="science-tag tag-g">細胞修復</span>
+      <div style="margin-top:16px;">
+        <a href="https://px.a8.net/svt/ejp?a8mat=4B1EPJ+6M5HUA+2RQU+6DJW1" rel="nofollow">
+          <img border="0" width="336" height="280" alt="" src="https://www28.a8.net/svt/bgt?aid=260406199400&wid=005&eno=01&mid=s00000012927001071000&mc=1" style="max-width:100%; border-radius:8px;">
+        </a>
+        <img border="0" width="1" height="1" src="https://www18.a8.net/0.gif?a8mat=4B1EPJ+6M5HUA+2RQU+6DJW1" alt="">
+      </div>
+    </div>
+    <div class="science-card sc-amber">
+      <div class="science-card-title">糖化（AGEs）と肌老化</div>
+      <div class="science-card-desc">余分な糖がタンパク質と結合しAGEsを生成。肌のシワ・くすみ、血管の硬化を招く。砂糖を1つ置き換えるだけで進行を遅らせられる。</div>
+      <span class="science-tag tag-a">抗糖化</span>
+    </div>
+    <div class="science-card sc-purple">
+      <div class="science-card-title">テロメアと有酸素運動</div>
+      <div class="science-card-desc">週150分の中強度運動でテロメアが若い状態に保たれることが複数の研究で示されている。10分×分割でも同等の効果が得られる。</div>
+      <span class="science-tag tag-p">DNA保護</span>
+    </div>
+    <div class="science-card sc-blue">
+      <div class="science-card-title">BDNF・成長ホルモン</div>
+      <div class="science-card-desc">運動と知的刺激でBDNFが増加し脳の老化を防ぐ。深い睡眠の最初の90分に成長ホルモンの約80%が分泌され肌・筋肉を修復する。</div>
+      <span class="science-tag tag-b">脳・筋肉</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="cta-title reveal">今日から、始めよう。</h2>
+  <p class="cta-sub reveal">アカウント不要。インストール不要。ブラウザを開くだけ。</p>
+  <div class="reveal">
+    <a class="btn-primary" href="wakagaeri.html" style="display:inline-flex; font-size:15px; padding:16px 40px;">
+      若返りプログラムを開く →
+    </a>
+  </div>
+  <p class="cta-note reveal">完全無料 ・ データはあなたの端末に保存 ・ 医療アドバイスではありません</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="15" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+      <circle cx="16" cy="16" r="10" stroke="#40916c" stroke-width="0.75"/>
+      <line x1="16" y1="4" x2="16" y2="28" stroke="rgba(255,255,255,0.3)" stroke-width="0.75"/>
+      <line x1="4" y1="16" x2="28" y2="16" stroke="rgba(255,255,255,0.3)" stroke-width="0.75"/>
+      <circle cx="16" cy="16" r="2.5" fill="#40916c"/>
+    </svg>
+    <span style="color:rgba(255,255,255,0.5); font-size:13px;">若返りプログラム</span>
+  </div>
+  <p class="footer-note">本アプリは一般的な健康習慣の情報提供を目的としており、医療的アドバイスを提供するものではありません。健康上の懸念がある場合は医師にご相談ください。</p>
+</footer>
+
+<script>
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+reveals.forEach(el => obs.observe(el));
+
+// Initial reveal for hero
+document.querySelectorAll('.hero .reveal').forEach((el, i) => {
+  setTimeout(() => el.classList.add('visible'), 200 + i * 120);
+});
+</script>
+</body>
+</html>

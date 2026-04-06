@@ -1,0 +1,66 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clip">
+      <rect width="1200" height="630"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#f9f6f1"/>
+
+  <!-- Decorative rings (right side) -->
+  <circle cx="950" cy="315" r="380" fill="none" stroke="#2e2a25" stroke-width="0.8" opacity="0.08"/>
+  <circle cx="950" cy="315" r="280" fill="none" stroke="#2e2a25" stroke-width="0.8" opacity="0.08"/>
+  <circle cx="950" cy="315" r="180" fill="none" stroke="#2d6a4f" stroke-width="1" opacity="0.15"/>
+  <circle cx="950" cy="315" r="90" fill="none" stroke="#2d6a4f" stroke-width="1" opacity="0.2"/>
+
+  <!-- Cross lines on logo -->
+  <line x1="950" y1="135" x2="950" y2="495" stroke="#2e2a25" stroke-width="0.8" opacity="0.12"/>
+  <line x1="770" y1="315" x2="1130" y2="315" stroke="#2e2a25" stroke-width="0.8" opacity="0.12"/>
+
+  <!-- Logo center -->
+  <circle cx="950" cy="315" r="18" fill="#2d6a4f"/>
+  <circle cx="950" cy="315" r="7" fill="#f9f6f1"/>
+
+  <!-- Cardinal dots -->
+  <circle cx="950" cy="225" r="6" fill="#2e2a25"/>
+  <circle cx="950" cy="405" r="6" fill="#2e2a25"/>
+  <circle cx="860" cy="315" r="6" fill="#2e2a25"/>
+  <circle cx="1040" cy="315" r="6" fill="#2e2a25"/>
+  <circle cx="950" cy="255" r="4" fill="#2d6a4f"/>
+  <circle cx="950" cy="375" r="4" fill="#2d6a4f"/>
+  <circle cx="890" cy="315" r="4" fill="#2d6a4f"/>
+  <circle cx="1010" cy="315" r="4" fill="#2d6a4f"/>
+
+  <!-- Left content area -->
+  <!-- Eyebrow -->
+  <rect x="80" y="160" width="32" height="1.5" fill="#2d6a4f"/>
+  <text x="124" y="167" font-family="Georgia, serif" font-size="13" fill="#2d6a4f" letter-spacing="3" font-weight="400">科学に基づく若返り習慣</text>
+
+  <!-- Main title -->
+  <text x="80" y="250" font-family="Georgia, 'Times New Roman', serif" font-size="72" fill="#2e2a25" font-weight="700" letter-spacing="-1">若返り</text>
+  <text x="80" y="340" font-family="Georgia, 'Times New Roman', serif" font-size="72" fill="#2e2a25" font-weight="700" letter-spacing="-1">プログラム</text>
+
+  <!-- Accent line -->
+  <rect x="80" y="368" width="280" height="2" fill="#2d6a4f" opacity="0.4"/>
+
+  <!-- Description -->
+  <text x="80" y="410" font-family="'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif" font-size="18" fill="#6b6560" letter-spacing="0.5">毎日11の習慣で、細胞から若返る。</text>
+  <text x="80" y="440" font-family="'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif" font-size="18" fill="#6b6560" letter-spacing="0.5">オートファジー・抗糖化・テロメアケア。</text>
+
+  <!-- Pills -->
+  <rect x="80" y="470" width="110" height="30" rx="15" fill="#d8f3dc"/>
+  <text x="135" y="490" font-family="'Hiragino Kaku Gothic Pro', sans-serif" font-size="13" fill="#2d6a4f" text-anchor="middle" font-weight="500">無料アプリ</text>
+
+  <rect x="202" y="470" width="130" height="30" rx="15" fill="#ede9f8"/>
+  <text x="267" y="490" font-family="'Hiragino Kaku Gothic Pro', sans-serif" font-size="13" fill="#4a3f6b" text-anchor="middle" font-weight="500">1日40分以内</text>
+
+  <rect x="344" y="470" width="130" height="30" rx="15" fill="#fde8d8"/>
+  <text x="409" y="490" font-family="'Hiragino Kaku Gothic Pro', sans-serif" font-size="13" fill="#b5451b" text-anchor="middle" font-weight="500">11の習慣</text>
+
+  <!-- URL -->
+  <text x="80" y="560" font-family="Georgia, monospace" font-size="14" fill="#a09890" letter-spacing="1">wakagaeri-app.com</text>
+
+  <!-- Bottom border -->
+  <rect x="0" y="620" width="1200" height="10" fill="#2d6a4f"/>
+</svg>
