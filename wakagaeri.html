@@ -464,7 +464,8 @@ let state = {
   streak: parseInt(localStorage.getItem('yg_streak') || '0'),
   lastDate: localStorage.getItem('yg_last') || '',
   week: JSON.parse(localStorage.getItem('yg_week') || '[]'),
-  mealHour: parseInt(localStorage.getItem('yg_meal') || '0') || null
+  mealHour: parseInt(localStorage.getItem('yg_meal') || '0') || null,
+  fastElapsed: parseInt(localStorage.getItem('yg_fast_elapsed') || '0') || 0
 };
 
 // New day handling
@@ -480,6 +481,8 @@ if (state.date !== todayStr()) {
   }
   state.done = [];
   state.date = todayStr();
+  state.mealHour = null;
+  state.fastElapsed = 0;
   save();
 }
 
@@ -490,6 +493,7 @@ function save() {
   localStorage.setItem('yg_last', state.lastDate);
   localStorage.setItem('yg_week', JSON.stringify(state.week));
   if (state.mealHour) localStorage.setItem('yg_meal', state.mealHour);
+  localStorage.setItem('yg_fast_elapsed', state.fastElapsed || 0);
 }
 
 function toggle(card) {
@@ -527,6 +531,13 @@ function renderToday() {
 
 function setMeal(hour, btn) {
   state.mealHour = hour;
+  // ボタンを押した瞬間の経過時間を記録して固定する
+  const now = new Date();
+  const meal = new Date();
+  meal.setDate(meal.getDate() - 1);
+  meal.setHours(hour, 0, 0, 0);
+  if (meal > now) meal.setDate(meal.getDate() - 1);
+  state.fastElapsed = Math.floor((now - meal) / 3600000);
   save();
   document.querySelectorAll('.meal-btn').forEach(b => b.classList.remove('selected'));
   btn.classList.add('selected');
@@ -535,12 +546,8 @@ function setMeal(hour, btn) {
 
 function renderFast() {
   if (!state.mealHour) return;
-  const now = new Date();
-  const meal = new Date();
-  meal.setDate(meal.getDate() - 1);
-  meal.setHours(state.mealHour, 0, 0, 0);
-  if (meal > now) meal.setDate(meal.getDate() - 1);
-  const elapsed = Math.floor((now - meal) / 3600000);
+  // 記録済みの経過時間を使う（リアルタイムで増やさない）
+  const elapsed = state.fastElapsed || 0;
   document.getElementById('fast-h').textContent = elapsed + '時間';
   document.getElementById('fast-fill').style.width = Math.min(100, Math.round(elapsed / 16 * 100)) + '%';
   document.getElementById('fast-st').textContent =
